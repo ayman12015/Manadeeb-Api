@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Addbill_model extends CI_Model
+class Addbill_model extends CI_Model 
 {
    
 
@@ -13,7 +13,7 @@ public function get_custbill($CustId)
 {
  
  
- $this->db->select('*');
+ $this->db->select('BillId, BillDate, ProdQty, ProdPrice, ProdName, SizerName');
         $this->db->from('customers_bills');
         $this->db->where('cust_id', $CustId); 
         $this->db->order_by('BillId', 'DESC');
@@ -29,8 +29,15 @@ public function get_custbill($CustId)
 
      $this->db->set('payment_status', 2);
      $this->db->where('BillId',$Bill_id);
-    $this->db->update('customers_bills');
+     $this->db->update('customers_bills');
+
+
+    return "1";
+
     }
+
+     
+
    
    //get valiable product
 
@@ -38,7 +45,7 @@ public function get_avaliableProduct($CustCompanyId,$uer_id)
 {
  
   
-       $this->db->select('*');
+       $this->db->select('prod_id, ProdNamePackage, package_abbreviation, ProductPrice');
        $this->db->from('prod_avalable');
        $this->db->where('company_id', $CustCompanyId); 
       // $this->db->where('user_id', $uer_id); 
@@ -71,16 +78,32 @@ public function get_avaliableProduct($CustCompanyId,$uer_id)
         return $query->result();
     }
 
-    // get customers
+    // get customers 
 
  public function get_customers( $CustCompanyId,$weekId,$uer_id)
 {
+   
  
- 
-      $this->db->select('*');
+      $this->db->select('cust_id, cust_name, cust_mobile, location_id, cust_shop_name, company_id');
        $this->db->from('customers');
        $this->db->where('company_id', $CustCompanyId); 
        $this->db->where('weekId', $weekId); 
+       $this->db->where('user_id', $uer_id); 
+
+    
+         
+        $query = $this->db->get();
+       
+        return $query->result();
+    }
+
+    public function get_selectedcustomers( $CustCompanyId,$uer_id)
+{
+   
+ 
+      $this->db->select('cust_id, cust_name, cust_mobile, location_id, cust_shop_name, company_id');
+       $this->db->from('customers');
+       $this->db->where('company_id', $CustCompanyId); 
        $this->db->where('user_id', $uer_id); 
 
     
@@ -95,8 +118,7 @@ public function get_avaliableProduct($CustCompanyId,$uer_id)
      public function get_product($uer_id)
        {
  
- 
-       $this->db->select('*');
+       $this->db->select('ShippingId, ProdNamePackage, package_abbreviation, ProductPackagePrice, qty ');
        $this->db->from('and_shipped_prod');
      //  $this->db->where('company_id', $CustCompanyId); 
       
@@ -115,9 +137,8 @@ public function get_avaliableProduct($CustCompanyId,$uer_id)
     public function get_unpaidcustomerlist( $CustCompanyId,$weekId,$uer_id)
 {
  
- 
-  
-       $this->db->select('*');
+
+       $this->db->select('cust_id, cust_name,cust_mobile ,LX , LY, cust_shop_name,company_id ');
        $this->db->from('customers c');
        $this->db->join('shops_locations cl', 'c.location_id=cl.location_id');
        $this->db->where('c.company_id', $CustCompanyId); 
@@ -138,9 +159,9 @@ public function get_avaliableProduct($CustCompanyId,$uer_id)
 {
  
  
- $this->db->select('*');
+ $this->db->select('bank_id, bank_name');
         $this->db->from('customer_banks');
-       // $this->db->where('cust_id', $cust_id); 
+       $this->db->where('del', 0); 
         $this->db->order_by('bank_id', 'DESC');
        
         $query = $this->db->get();

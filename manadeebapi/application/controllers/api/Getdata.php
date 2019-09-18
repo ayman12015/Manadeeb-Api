@@ -33,7 +33,7 @@ class Getdata extends \manadeebapi\Libraries\REST_Controller
         if (!empty($is_valid_token) AND $is_valid_token['status'] === TRUE)
         {
               
-              $CustId =  $this->input->post('CustId');
+              $CustId =  $this->input->post('CustId'); 
 
                $data = $this->AddbillModel->get_custbill($CustId);
 
@@ -85,8 +85,6 @@ class Getdata extends \manadeebapi\Libraries\REST_Controller
               $uer_id =  $data->id;
               $Bill_id =  $this->input->post('Bill_id');
              
-
-
 
               $data = $this->AddbillModel->cancel_bill($Bill_id);
 
@@ -176,6 +174,18 @@ class Getdata extends \manadeebapi\Libraries\REST_Controller
         }
 
    }
+
+  //function for test 
+
+   // function display(){
+   //  header("Access-Control-Allow-Origin: *");
+   //  $this->load->library('Authorization');
+   //  $is_valid_token = $this->->authorization_token->validateToken();
+   //  if(!empty($is))
+
+   // }
+   
+
 
 //get unpaid customer bils
    
@@ -393,10 +403,65 @@ class Getdata extends \manadeebapi\Libraries\REST_Controller
             $this->response(['status' => FALSE, 'message' => $is_valid_token['message'] ], REST_Controller::HTTP_NOT_FOUND);
 
         }
-    }
+    } 
+
+ function getSelectedCustomers_post(){
+
+  header("Access-Control-Allow-Origin: *");
+    
+        // Load Authorization Token Library
+        $this->load->library('Authorization_Token');
+
+        /**
+         * User Token Validation
+         */
+        $is_valid_token = $this->authorization_token->validateToken();
+
+        if (!empty($is_valid_token) AND $is_valid_token['status'] === TRUE)
+        {
+
+              $data =  $is_valid_token['data'];
+              $uer_id =  $data->id;
+              $CustCompanyId =  $this->input->post('CustCompanyId');
+              
 
 
-    // get customer infromation
+
+              $data = $this->AddbillModel->get_selectedcustomers($CustCompanyId, $uer_id);
+
+
+
+               if ($data > 0 AND !empty($data))
+                {
+                    // Success
+                    $message = [
+                        'status' => true,
+                        'message' => "Data Found Successfull",
+                        'data' => $data,
+                    ];
+                    $this->response($message, REST_Controller::HTTP_OK);
+                } else
+                {
+                    // Error
+                    $message = [
+                        'status' => FALSE,
+                        'message' => "Data Not Found"
+                    ];
+                    $this->response($message, REST_Controller::HTTP_NOT_FOUND);
+                }
+                
+
+        } else {
+
+
+            $this->response(['status' => FALSE, 'message' => $is_valid_token['message'] ], REST_Controller::HTTP_NOT_FOUND);
+
+        }
+
+    
+ }
+
+  // get customer infromation
 
   function getCustomers_post()
  { 

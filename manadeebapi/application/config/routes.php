@@ -56,7 +56,13 @@ $route['translate_uri_dashes'] = FALSE;
 // User API Routes
 $route['api/user/login'] = 'api/users/login';
 
+//add screens_
+
+$route['api/customer/Payment'] = 'api/customers/Payments';
 $route['api/customer/addCustomer'] = 'api/customers/addCustomers';
+
+
+// get screeens
 
 $route['api/getdata/getBill'] = 'api/getdata/getBills';
 $route['api/getdata/CancelBill'] = 'api/getdata/CancelBills';
@@ -66,6 +72,7 @@ $route['api/getdata/GetUnpaymentcuslist'] = 'api/getdata/GetUnpaymentcuslists';
 $route['api/getdata/GetProduct'] = 'api/getdata/GetProducts';
 $route['api/getdata/getBank'] = 'api/getdata/getBanks';
 $route['api/getdata/getCustomer'] = 'api/getdata/getCustomers';
+$route['api/getdata/getSelectedCustomer'] = 'api/getdata/getSelectedCustomers';
 
 
 
